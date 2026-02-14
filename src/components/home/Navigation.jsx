@@ -220,10 +220,10 @@ export default function Navigation() {
               </span>
 
               <span
-                onClick={() => handleScroll("about")}
+                onClick={() => navigate("/history")}
                 className="cursor-pointer border-b border-[#C0B87A] pb-2"
               >
-                About
+                History
               </span>
 
               <span
