@@ -1,5 +1,5 @@
 import React from "react";
-import "./index.css";
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/home/Home.jsx";
 import Layout from "./layout/Layout.jsx";
@@ -14,6 +14,7 @@ import SolveQuiz from "./pages/quest/SolveQuiz.jsx";
 import HistoryPage from "./pages/quest/HistoryPage.jsx";
 import ProfilePage from "./pages/profile/Profile.jsx";
 import NotFound from "./pages/home/NotFound.jsx";
+import './App.css'
 
 const GoogleAuthWrapper = () => (
   <GoogleOAuthProvider clientId="832136972760-okhj2j7j5gcrio9metbttl11opn7kla6.apps.googleusercontent.com">
