@@ -22,7 +22,7 @@ const Footer = () => {
       setLoading(true);
 
       const response = await axios.post(
-        "http://localhost:4001/api/v1/user/getComplaint",
+        "https://api-gyan-backend.onrender.com/api/v1/user/getComplaint",
         formData,
         {
           headers: {

@@ -36,7 +36,7 @@ export default function ExtraInfo() {
       setLoading(true);
 
       const response = await axios.post(
-        "http://localhost:4001/api/v1/user/complete-google-signup",
+        "https://api-gyan-backend.onrender.com/api/v1/user/complete-google-signup",
         {
           email,
           ...form,

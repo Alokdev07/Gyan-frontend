@@ -29,7 +29,7 @@ export default function SolveQuiz() {
       setLoading(true);
 
       const res = await axios.get(
-        "http://localhost:4001/api/v1/quiz/getquiz",
+        "https://api-gyan-backend.onrender.com/api/v1/quiz/getquiz",
         {
           params: {
             subject,
@@ -110,7 +110,7 @@ export default function SolveQuiz() {
   const submitQuiz = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:4001/api/v1/attempt/saveHistory",
+        "https://api-gyan-backend.onrender.com/api/v1/attempt/saveHistory",
         { attempts },
         { withCredentials: true }
       );

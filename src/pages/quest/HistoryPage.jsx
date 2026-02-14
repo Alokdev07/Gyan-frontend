@@ -18,7 +18,7 @@ export default function HistoryPage() {
       try {
         setLoading(true);
         const res = await axios.get(
-          "http://localhost:4001/api/v1/attempt/getHistory",
+          "https://api-gyan-backend.onrender.com/api/v1/attempt/getHistory",
           { withCredentials: true },
         );
         setHistoryData(res.data.data.history);
@@ -88,7 +88,13 @@ export default function HistoryPage() {
           <p className="text-xs text-[#F2E3BB] uppercase tracking-wide">
             {item.question.subject}
           </p>
-          <p className="text-sm text-[#C0B87A]">
+          <p
+          onClick={() => navigate('/profile',{
+            state : {
+              "username" : item.question.createdBy.username
+            }
+          })}
+          className="text-sm text-[#C0B87A]">
             Created by {item.question.createdBy.username}
           </p>
         </div>

@@ -30,9 +30,9 @@ export default function ProfilePage() {
         let url;
 
         if (usernameFromQuery) {
-          url = `http://localhost:4001/api/v1/user/getUser?username=${usernameFromQuery}`;
+          url = `https://api-gyan-backend.onrender.com/api/v1/user/getUser?username=${usernameFromQuery}`;
         } else {
-          url = `http://localhost:4001/api/v1/user/getProfile`;
+          url = `https://api-gyan-backend.onrender.com/api/v1/user/getProfile`;
         }
 
         const response = await axios.get(url,{withCredentials : true});
@@ -50,7 +50,7 @@ export default function ProfilePage() {
 
   const handleLogout = async() => {
     try {
-        const response = await axios.get("http://localhost:4001/api/v1/user/logout",{withCredentials : true})
+        const response = await axios.get("https://api-gyan-backend.onrender.com/api/v1/user/logout",{withCredentials : true})
         toast.success("logout successfully")
         if(response){
             navigate('/')

@@ -18,7 +18,7 @@ export default function Navigation() {
   const getProfile = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:4001/api/v1/user/getProfile",
+        "https://api-gyan-backend.onrender.com/api/v1/user/getProfile",
         { withCredentials: true },
       );
 

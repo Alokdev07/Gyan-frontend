@@ -35,7 +35,7 @@ export default function VerifyEmail() {
       setLoading(true);
 
       const response = await axios.post(
-        "http://localhost:4001/api/v1/user/verifyEmail",
+        "https://api-gyan-backend.onrender.com/api/v1/user/verifyEmail",
         {
           email,
           purpose: "register",
@@ -57,7 +57,7 @@ export default function VerifyEmail() {
   const HandleVerify = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:4001/api/v1/user/verifyOtp",
+        "https://api-gyan-backend.onrender.com/api/v1/user/verifyOtp",
         { email, otp, purpose: "register" },
         { withCredentials: true },
       );
@@ -83,7 +83,7 @@ export default function VerifyEmail() {
         const code = authResult.code;
 
         const response = await axios.get(
-          `http://localhost:4001/api/v1/user/googleLogin?code=${code}`,
+          `https://api-gyan-backend.onrender.com/api/v1/user/googleLogin?code=${code}`,
           { withCredentials: true },
         );
 

@@ -45,7 +45,7 @@ export default function Signup() {
       if (certificate) formData.append("certificate", certificate);
 
       const res = await axios.post(
-        "http://localhost:4001/api/v1/user/signup",
+        "https://api-gyan-backend.onrender.com/api/v1/user/signup",
         formData,
         { withCredentials: true }
       );
