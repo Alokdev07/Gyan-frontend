@@ -198,10 +198,32 @@ export default function Navigation() {
         {/* MOBILE MENU */}
         {collapsed && (
           <div className="md:hidden mt-3 mx-auto max-w-4xl rounded-2xl bg-[#F2E3BB] shadow-lg p-4 space-y-4 transition-all duration-300">
+            {/* USER INFO (if logged in) */}
+            {data && (
+              <div
+                onClick={() => {
+                  navigate("/profile", { state: data.username });
+                  setCollapsed(false);
+                  handleInteraction();
+                }}
+                className="flex items-center gap-3 border-b border-[#C0B87A] pb-3 cursor-pointer"
+              >
+                <img
+                  src={data.avatar}
+                  alt="avatar"
+                  className="w-10 h-10 rounded-full object-cover"
+                />
+                <span className="font-semibold text-[#005F02]">
+                  {data.username}
+                </span>
+              </div>
+            )}
+
             <div className="flex flex-col gap-3 text-[#005F02] font-medium">
               <span
                 onClick={() => {
                   navigate("/");
+                  setCollapsed(false);
                   handleInteraction();
                 }}
                 className="cursor-pointer border-b border-[#C0B87A] pb-2"
@@ -212,6 +234,7 @@ export default function Navigation() {
               <span
                 onClick={() => {
                   navigate("/solvequiz");
+                  setCollapsed(false);
                   handleInteraction();
                 }}
                 className="cursor-pointer border-b border-[#C0B87A] pb-2"
@@ -220,18 +243,42 @@ export default function Navigation() {
               </span>
 
               <span
-                onClick={() => navigate("/history")}
+                onClick={() => {
+                  navigate("/history");
+                  setCollapsed(false);
+                  handleInteraction();
+                }}
                 className="cursor-pointer border-b border-[#C0B87A] pb-2"
               >
                 History
               </span>
 
-              <span
-                onClick={() => navigate("/profile")}
-                className="cursor-pointer border-b border-[#C0B87A] pb-2"
-              >
-                profile
-              </span>
+              {/* Show Sign In / Sign Up if NOT logged in */}
+              {!data && (
+                <>
+                  <span
+                    onClick={() => {
+                      navigate("/login");
+                      setCollapsed(false);
+                      handleInteraction();
+                    }}
+                    className="cursor-pointer border-b border-[#C0B87A] pb-2"
+                  >
+                    Sign In
+                  </span>
+
+                  <span
+                    onClick={() => {
+                      navigate("/verifyEmail");
+                      setCollapsed(false);
+                      handleInteraction();
+                    }}
+                    className="cursor-pointer pb-2"
+                  >
+                    Sign Up
+                  </span>
+                </>
+              )}
             </div>
           </div>
         )}
