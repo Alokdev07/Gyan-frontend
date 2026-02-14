@@ -227,10 +227,10 @@ export default function Navigation() {
               </span>
 
               <span
-                onClick={() => handleScroll("contact")}
+                onClick={() => navigate("/profile")}
                 className="cursor-pointer border-b border-[#C0B87A] pb-2"
               >
-                Contact Us
+                profile
               </span>
             </div>
           </div>
