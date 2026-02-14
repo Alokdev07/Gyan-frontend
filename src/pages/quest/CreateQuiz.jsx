@@ -1,6 +1,8 @@
 import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 
 export default function CreateQuiz() {
@@ -12,6 +14,11 @@ export default function CreateQuiz() {
     subject: "",
     expiryTime: "",
   });
+  const navigate = useNavigate()
+  const user = useSelector((state) => state.user.data)
+  if(!user){
+    navigate('/login')
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
