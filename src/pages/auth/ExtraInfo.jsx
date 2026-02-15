@@ -11,6 +11,7 @@ export default function ExtraInfo() {
   const dispatch = useDispatch();
 
   const {email} = location.state;
+  console.log(email)
 
   const [form, setForm] = useState({
     fullName: "",
