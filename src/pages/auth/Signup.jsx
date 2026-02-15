@@ -49,15 +49,12 @@ export default function Signup() {
       formData
     );
 
-    // ✅ Check token exists
     if (res?.data?.data?.token) {
 
-      // Store token in localStorage
       localStorage.setItem("token", res.data.data.token);
 
       toast.success("Signup successful 🎉");
 
-      // Dispatch only user object
       dispatch(addUser(res.data.data.user));
 
       navigate("/");

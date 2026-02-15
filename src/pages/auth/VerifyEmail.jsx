@@ -90,7 +90,7 @@ export default function VerifyEmail() {
         toast.success("Google sign-in successful");
 
         navigate("/extraInfo", {
-          state: response.data.data?.email,
+         state: { email: response.data.data?.email }
         });
       } catch (err) {
         toast.error(err.response?.data?.message || "Google login failed");
