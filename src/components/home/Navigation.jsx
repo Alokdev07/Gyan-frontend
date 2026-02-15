@@ -19,7 +19,7 @@ export default function Navigation() {
     try {
       const response = await axios.get(
         "https://api-gyan-backend.onrender.com/api/v1/user/getProfile",
-        { withCredentials: true },
+        { withCredentials: true }
       );
 
       if (response?.data?.data) {
@@ -34,7 +34,6 @@ export default function Navigation() {
     if (!data) getProfile();
   }, [data]);
 
-  // 🔥 Start auto hide timer
   const startTimer = () => {
     clearTimeout(timerRef.current);
     timerRef.current = setTimeout(() => {
@@ -74,20 +73,17 @@ export default function Navigation() {
 
   return (
     <div className="fixed top-0 left-0 w-full z-50">
-      {/* Hover Trigger Area */}
       <div className="h-6 w-full" onMouseEnter={() => setVisible(true)}></div>
 
-      {/* Navbar */}
       <div
         onMouseEnter={() => setVisible(true)}
         onMouseLeave={startTimer}
         className={`left-1/2 -translate-x-1/2 w-full px-3 absolute top-4 transition-all duration-500 ease-in-out
-    ${visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-8"}`}
+        ${visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-8"}`}
       >
-        <div
-          className="mx-auto flex items-center justify-between gap-6 px-8 py-3 shadow-2xl backdrop-blur-md 
-        w-full max-w-4xl rounded-full bg-[#F2E3BB] transition-all duration-500"
-        >
+        <div className="mx-auto flex items-center justify-between px-4 py-3 shadow-2xl backdrop-blur-md 
+        w-full max-w-4xl rounded-full bg-[#F2E3BB] transition-all duration-500">
+
           {/* Logo */}
           <div
             onClick={() => {
@@ -99,7 +95,7 @@ export default function Navigation() {
             GyanAryan
           </div>
 
-          {/* DESKTOP NAV */}
+          {/* Desktop Nav */}
           <nav className="hidden md:flex gap-6 text-[#005F02] font-medium">
             <span
               onClick={() => {
@@ -139,8 +135,10 @@ export default function Navigation() {
             </span>
           </nav>
 
-          {/* AUTH */}
-          <div className="hidden md:flex items-center gap-3">
+          {/* Right Section (Auth + Hamburger) */}
+          <div className="flex items-center gap-3">
+
+            {/* AUTH */}
             {!data ? (
               <>
                 <button
@@ -148,76 +146,57 @@ export default function Navigation() {
                     navigate("/login");
                     handleInteraction();
                   }}
-                  className="px-4 py-1 rounded-full border border-[#427A43] text-[#005F02]"
+                  className="px-3 py-1 text-xs md:text-sm rounded-full border border-[#427A43] text-[#005F02]"
                 >
                   Sign In
                 </button>
+
                 <button
                   onClick={() => {
                     navigate("/verifyEmail");
                     handleInteraction();
                   }}
-                  className="px-4 py-1 rounded-full bg-[#005F02] text-[#F2E3BB]"
+                  className="px-3 py-1 text-xs md:text-sm rounded-full bg-[#005F02] text-[#F2E3BB]"
                 >
                   Sign Up
                 </button>
               </>
             ) : (
-              <div className="flex items-center gap-2">
-                <img
-                  src={data.avatar}
-                  alt="avatar"
-                  className="w-9 h-9 rounded-full object-cover"
-                />
-                <span
-                  onClick={() =>
-                    navigate("/profile", {
-                      state: data.username,
-                    })
-                  }
-                  className="font-semibold"
-                >
-                  {data.username}
-                </span>
-              </div>
-            )}
-          </div>
-
-          {/* MOBILE MENU BUTTON */}
-          <button
-            onClick={() => {
-              setCollapsed(!collapsed);
-              handleInteraction();
-            }}
-            className="md:hidden text-[#005F02] text-xl"
-          >
-            ☰
-          </button>
-        </div>
-
-        {/* MOBILE MENU */}
-        {collapsed && (
-          <div className="md:hidden mt-3 mx-auto max-w-4xl rounded-2xl bg-[#F2E3BB] shadow-lg p-4 space-y-4 transition-all duration-300">
-            {/* USER INFO (if logged in) */}
-            {data && (
               <div
-                onClick={() => {
-                  navigate("/profile", { state: data.username });
-                  setCollapsed(false);
-                  handleInteraction();
-                }}
-                className="flex items-center gap-3 border-b border-[#C0B87A] pb-3 cursor-pointer"
+                onClick={() =>
+                  navigate("/profile", {
+                    state: data.username,
+                  })
+                }
+                className="flex items-center gap-2 cursor-pointer"
               >
                 <img
                   src={data.avatar}
                   alt="avatar"
-                  className="w-10 h-10 rounded-full object-cover"
+                  className="w-8 h-8 rounded-full object-cover"
                 />
-                <span className="font-semibold text-[#005F02]">
+                <span className="font-semibold text-[#005F02] text-sm hidden sm:block">
                   {data.username}
                 </span>
               </div>
             )}
+
+            {/* Hamburger (Mobile Only) */}
+            <button
+              onClick={() => {
+                setCollapsed(!collapsed);
+                handleInteraction();
+              }}
+              className="md:hidden text-[#005F02] text-xl"
+            >
+              ☰
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Menu */}
+        {collapsed && (
+          <div className="md:hidden mt-3 mx-auto max-w-4xl rounded-2xl bg-[#F2E3BB] shadow-lg p-4 space-y-4 transition-all duration-300">
 
             <div className="flex flex-col gap-3 text-[#005F02] font-medium">
               <span
@@ -253,32 +232,15 @@ export default function Navigation() {
                 History
               </span>
 
-              {/* Show Sign In / Sign Up if NOT logged in */}
-              {!data && (
-                <>
-                  <span
-                    onClick={() => {
-                      navigate("/login");
-                      setCollapsed(false);
-                      handleInteraction();
-                    }}
-                    className="cursor-pointer border-b border-[#C0B87A] pb-2"
-                  >
-                    Sign In
-                  </span>
-
-                  <span
-                    onClick={() => {
-                      navigate("/verifyEmail");
-                      setCollapsed(false);
-                      handleInteraction();
-                    }}
-                    className="cursor-pointer pb-2"
-                  >
-                    Sign Up
-                  </span>
-                </>
-              )}
+              <span
+                onClick={() => {
+                  handleScroll("contact");
+                  setCollapsed(false);
+                }}
+                className="cursor-pointer"
+              >
+                Contact Us
+              </span>
             </div>
           </div>
         )}
