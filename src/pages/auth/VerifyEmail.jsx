@@ -83,12 +83,13 @@ export default function VerifyEmail() {
         const code = authResult.code;
 
         const response = await axios.get(
-          `https://api-gyan-backend.onrender.com/api/v1/user/googleLogin?code=${code}`,
+          `https://api-gyan-backend.onrender.com/api/v1/user/googleLogin?code=${code}`
+          ,
           { withCredentials: true },
         );
 
         toast.success("Google sign-in successful");
-
+        console.log(response.data.data?.email)
         navigate("/extraInfo", {
          state: { email: response.data.data?.email }
         });
