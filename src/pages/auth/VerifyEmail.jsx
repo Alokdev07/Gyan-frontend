@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useGoogleLogin } from "@react-oauth/google";
 
-
 export default function VerifyEmail() {
   const [googleLoading, setGoogleLoading] = useState(false);
   const [showOtp, setShowOtp] = useState(false);
@@ -83,15 +82,13 @@ export default function VerifyEmail() {
         const code = authResult.code;
 
         const response = await axios.get(
-          `https://api-gyan-backend.onrender.com/api/v1/user/googleLogin?code=${code}`
-          ,
+          `https://api-gyan-backend.onrender.com/api/v1/user/googleLogin?code=${code}`,
           { withCredentials: true },
         );
 
         toast.success("Google sign-in successful");
-        console.log(response.data.data?.email)
         navigate("/extraInfo", {
-         state: { email: response.data.data?.email }
+          state: { email: response.data.data?.user?.email },
         });
       } catch (err) {
         toast.error(err.response?.data?.message || "Google login failed");
@@ -122,7 +119,7 @@ export default function VerifyEmail() {
           <input
             type="email"
             value={email}
-            disabled={showOtp} 
+            disabled={showOtp}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email"
             className="flex-1 px-4 py-3 rounded-xl border border-[#427A43] focus:outline-none focus:ring-2 focus:ring-[#005F02] disabled:opacity-60"
@@ -130,7 +127,7 @@ export default function VerifyEmail() {
 
           <button
             onClick={HandleVerifyFunction}
-            disabled={loading || showOtp} 
+            disabled={loading || showOtp}
             className={`px-5 py-3 rounded-xl font-semibold transition-all duration-300
               ${
                 loading || showOtp
