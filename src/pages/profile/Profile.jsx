@@ -53,21 +53,15 @@ const handleLogout = async () => {
     const token = localStorage.getItem("token");
 
     if (token) {
-      await axios.post(
-        "https://api-gyan-backend.onrender.com/api/v1/user/logout",
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      await axios.get(
+        "https://api-gyan-backend.onrender.com/api/v1/user/logout"
       );
     }
 
-    // 🔥 Remove token from localStorage
+    
     localStorage.removeItem("token");
 
-    // 🔥 Optional: clear redux user
+  
     dispatch(logoutUser());
 
     toast.success("Logout successfully");
