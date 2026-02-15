@@ -25,41 +25,44 @@ export default function Signin() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    let newErrors = {};
+  e.preventDefault();
+  let newErrors = {};
 
-    if (!form.identifier.trim()) {
-      newErrors.identifier = "Username or email is required";
-    } else if (form.identifier.includes("@") && !isEmail(form.identifier)) {
-      newErrors.identifier = "Enter a valid email address";
+  if (!form.identifier.trim()) {
+    newErrors.identifier = "Username or email is required";
+  } else if (form.identifier.includes("@") && !isEmail(form.identifier)) {
+    newErrors.identifier = "Enter a valid email address";
+  }
+
+  if (!form.password) {
+    newErrors.password = "Password is required";
+  }
+
+  if (Object.keys(newErrors).length > 0) {
+    setErrors(newErrors);
+    return;
+  }
+
+  try {
+    const response = await axios.post(
+      "https://api-gyan-backend.onrender.com/api/v1/user/login",
+      form
+    );
+
+    if (response?.data?.data?.token) {
+      
+      localStorage.setItem("token", response.data.data.token);
+
+      toast.success("Login successful 🎉");
+
+      dispatch(addUser(response.data.data.user)); 
+      navigate("/");
     }
 
-    if (!form.password) {
-      newErrors.password = "Password is required";
-    }
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
-
-    try {
-      const response = await axios.post(
-        "https://api-gyan-backend.onrender.com/api/v1/user/login",
-        form,
-        {
-          withCredentials: true,
-        },
-      );
-      if(response){
-        toast.success("Signup successful 🎉");
-              dispatch(addUser(response.data.data));
-              navigate("/");
-      }
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Signup failed ❌");
-    }
-  };
+  } catch (error) {
+    toast.error(error.response?.data?.message || "Login failed ❌");
+  }
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#005F02] to-[#427A43] px-4">

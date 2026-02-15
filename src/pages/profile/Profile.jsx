@@ -48,17 +48,34 @@ export default function ProfilePage() {
     fetchProfile();
   }, [usernameFromQuery]);
 
-  const handleLogout = async() => {
-    try {
-        const response = await axios.get("https://api-gyan-backend.onrender.com/api/v1/user/logout",{withCredentials : true})
-        toast.success("logout successfully")
-        if(response){
-            navigate('/')
+const handleLogout = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      await axios.post(
+        "https://api-gyan-backend.onrender.com/api/v1/user/logout",
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-    } catch (error) {
-        toast.error(error.message)
+      );
     }
+
+    // 🔥 Remove token from localStorage
+    localStorage.removeItem("token");
+
+    // 🔥 Optional: clear redux user
+    dispatch(addUser(null));
+
+    toast.success("Logout successfully");
+    navigate("/");
+  } catch (error) {
+    toast.error(error.response?.data?.message || "Logout failed");
   }
+};
 
   if (loading) {
     return (

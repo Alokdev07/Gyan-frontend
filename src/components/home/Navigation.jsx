@@ -15,20 +15,28 @@ export default function Navigation() {
 
   const data = useSelector((state) => state.user.data);
 
-  const getProfile = async () => {
-    try {
-      const response = await axios.get(
-        "https://api-gyan-backend.onrender.com/api/v1/user/getProfile",
-        { withCredentials: true }
-      );
+const getProfile = async () => {
+  try {
+    const token = localStorage.getItem("token");
 
-      if (response?.data?.data) {
-        dispatch(addUser(response.data.data));
+    if (!token) return;
+
+    const response = await axios.get(
+      "https://api-gyan-backend.onrender.com/api/v1/user/getProfile",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
-    } catch (error) {
-      console.error(error);
+    );
+
+    if (response?.data?.data) {
+      dispatch(addUser(response.data.data));
     }
-  };
+  } catch (error) {
+    console.error(error);
+  }
+};
 
   useEffect(() => {
     if (!data) getProfile();
