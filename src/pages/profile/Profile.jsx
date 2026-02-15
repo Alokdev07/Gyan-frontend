@@ -68,7 +68,7 @@ const handleLogout = async () => {
     localStorage.removeItem("token");
 
     // 🔥 Optional: clear redux user
-    dispatch(addUser(null));
+    dispatch(logoutUser());
 
     toast.success("Logout successfully");
     navigate("/");
