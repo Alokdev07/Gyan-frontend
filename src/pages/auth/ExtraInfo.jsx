@@ -29,33 +29,42 @@ export default function ExtraInfo() {
   };
 
   const handleSubmit = async () => {
-    if (form.password !== form.confirmPassword) {
-      return toast.error("Passwords do not match");
-    }
+  if (!email) {
+    return toast.error("Email missing. Please login again.");
+  }
 
-    try {
-      setLoading(true);
+  if (form.password !== form.confirmPassword) {
+    return toast.error("Passwords do not match");
+  }
 
-      const response = await axios.post(
-        "https://api-gyan-backend.onrender.com/api/v1/user/complete-google-signup",
-        {
-          email,
-          ...form,
-        },
-        { withCredentials: true },
-      );
-      if (response) {
-        dispatch(addUser(response.data.data))
-        toast.success("Account created successfully 🎉");
-        navigate("/");
+  try {
+    setLoading(true);
+
+    const response = await axios.post(
+      "https://api-gyan-backend.onrender.com/api/v1/user/complete-google-signup",
+      {
+        email,
+        ...form,
       }
-    } catch (err) {
-      toast.error(err.response?.data?.message || "Something went wrong");
-    } finally {
-      setLoading(false);
-    }
-  };
+    );
 
+    if (response?.data?.success) {
+      const { user, token } = response.data.data;
+
+      localStorage.setItem("token", token);
+
+      dispatch(addUser(user));
+
+      toast.success("Account created successfully 🎉");
+
+      navigate("/");
+    }
+  } catch (err) {
+    toast.error(err.response?.data?.message || "Something went wrong");
+  } finally {
+    setLoading(false);
+  }
+};
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#005F02] via-[#427A43] to-[#005F02] px-4">
       <div className="w-full max-w-lg bg-[#F2E3BB]/90 backdrop-blur-xl rounded-2xl shadow-2xl p-8 animate-fadeIn">
