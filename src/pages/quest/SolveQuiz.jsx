@@ -28,6 +28,13 @@ export default function SolveQuiz() {
     try {
       setLoading(true);
 
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        toast.error("Please login first");
+        return;
+      }
+
       const res = await axios.get(
         "https://api-gyan-backend.onrender.com/api/v1/quiz/getquiz",
         {
@@ -36,7 +43,9 @@ export default function SolveQuiz() {
             lastId: reset ? null : lastId,
             limit: 5,
           },
-          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
       );
 
