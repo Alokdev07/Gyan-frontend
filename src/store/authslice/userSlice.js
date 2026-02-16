@@ -19,3 +19,5 @@ const userSlice = createSlice({
 
 export const { addUser, logoutUser } = userSlice.actions
 export default userSlice.reducer
+
+// completed
