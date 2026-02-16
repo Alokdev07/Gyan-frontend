@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
-import { useLocation,useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { logoutUser } from "../../store/authslice/userSlice.js";
-import {toast} from 'react-toastify'
+import { toast } from "react-toastify";
 
 export default function ProfilePage() {
   const location = useLocation();
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.user.data);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  if(!currentUser){
-    navigate('/')
+  if (!currentUser) {
+    navigate("/");
   }
 
   const [profile, setProfile] = useState(null);
@@ -27,6 +27,8 @@ export default function ProfilePage() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
+        setLoading(true);
+
         let url;
 
         if (usernameFromQuery) {
@@ -35,8 +37,15 @@ export default function ProfilePage() {
           url = `https://api-gyan-backend.onrender.com/api/v1/user/getProfile`;
         }
 
-        const response = await axios.get(url,{withCredentials : true});
-        console.log(response.data.data)
+        const token = localStorage.getItem("token");
+
+        const response = await axios.get(url, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        console.log(response.data.data);
         setProfile(response.data.data);
       } catch (error) {
         console.error(error);
@@ -48,28 +57,26 @@ export default function ProfilePage() {
     fetchProfile();
   }, [usernameFromQuery]);
 
-const handleLogout = async () => {
-  try {
-    const token = localStorage.getItem("token");
+  const handleLogout = async () => {
+    try {
+      const token = localStorage.getItem("token");
 
-    if (token) {
-      await axios.get(
-        "https://api-gyan-backend.onrender.com/api/v1/user/logout"
-      );
+      if (token) {
+        await axios.get(
+          "https://api-gyan-backend.onrender.com/api/v1/user/logout",
+        );
+      }
+
+      localStorage.removeItem("token");
+
+      dispatch(logoutUser());
+
+      toast.success("Logout successfully");
+      navigate("/");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Logout failed");
     }
-
-    
-    localStorage.removeItem("token");
-
-  
-    dispatch(logoutUser());
-
-    toast.success("Logout successfully");
-    navigate("/");
-  } catch (error) {
-    toast.error(error.response?.data?.message || "Logout failed");
-  }
-};
+  };
 
   if (loading) {
     return (

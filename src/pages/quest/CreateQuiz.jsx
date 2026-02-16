@@ -4,7 +4,6 @@ import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-
 export default function CreateQuiz() {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -14,10 +13,10 @@ export default function CreateQuiz() {
     subject: "",
     expiryTime: "",
   });
-  const navigate = useNavigate()
-  const user = useSelector((state) => state.user.data)
-  if(!user){
-    navigate('/login')
+  const navigate = useNavigate();
+  const user = useSelector((state) => state.user.data);
+  if (!user) {
+    navigate("/login");
   }
 
   const handleChange = (e) => {
@@ -37,17 +36,27 @@ export default function CreateQuiz() {
     try {
       setLoading(true);
 
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        toast.error("Please login first");
+        return;
+      }
+
       const response = await axios.post(
         "https://api-gyan-backend.onrender.com/api/v1/quiz/createquiz",
         formData,
-        { withCredentials: true },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
 
       toast.success("Quiz created successfully 🎉");
 
       console.log(response.data);
 
-      
       setFormData({
         question: "",
         options: ["", "", "", ""],

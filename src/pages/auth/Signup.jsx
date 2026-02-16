@@ -22,48 +22,46 @@ export default function Signup() {
   const navigate = useNavigate();
 
   const handleSignup = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  if (!email) {
-    toast.error("Email not found. Please verify again.");
-    return navigate("/verifyEmail");
-  }
-
-  if (role === "teacher" && !certificate) {
-    return toast.error("Certificate is required for teachers");
-  }
-
-  try {
-    const formData = new FormData();
-    formData.append("username", username);
-    formData.append("fullName", fullName);
-    formData.append("email", email);
-    formData.append("password", password);
-    formData.append("role", role);
-
-    if (avatar) formData.append("avatar", avatar);
-    if (certificate) formData.append("certificate", certificate);
-
-    const res = await axios.post(
-      "https://api-gyan-backend.onrender.com/api/v1/user/signup",
-      formData
-    );
-
-    if (res?.data?.data?.token) {
-
-      localStorage.setItem("token", res.data.data.token);
-
-      toast.success("Signup successful 🎉");
-
-      dispatch(addUser(res.data.data.user));
-
-      navigate("/");
+    if (!email) {
+      toast.error("Email not found. Please verify again.");
+      return navigate("/verifyEmail");
     }
 
-  } catch (err) {
-    toast.error(err.response?.data?.message || "Signup failed ❌");
-  }
-};
+    if (role === "teacher" && !certificate) {
+      return toast.error("Certificate is required for teachers");
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append("username", username);
+      formData.append("fullName", fullName);
+      formData.append("email", email);
+      formData.append("password", password);
+      formData.append("role", role);
+
+      if (avatar) formData.append("avatar", avatar);
+      if (certificate) formData.append("certificate", certificate);
+
+      const res = await axios.post(
+        "https://api-gyan-backend.onrender.com/api/v1/user/signup",
+        formData,
+      );
+
+      if (res?.data?.data?.token) {
+        localStorage.setItem("token", res.data.data.token);
+
+        toast.success("Signup successful 🎉");
+
+        dispatch(addUser(res.data.data.user));
+
+        navigate("/");
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Signup failed ❌");
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#005F02] via-[#427A43] to-[#005F02] px-4">
@@ -78,7 +76,10 @@ export default function Signup() {
         {/* Avatar */}
         <div className="flex justify-center">
           <label className="cursor-pointer">
-            <input type="file" hidden accept="image/*"
+            <input
+              type="file"
+              hidden
+              accept="image/*"
               onChange={(e) => setAvatar(e.target.files[0])}
             />
             <div className="w-24 h-24 rounded-full border-2 border-[#427A43] overflow-hidden flex items-center justify-center bg-white">

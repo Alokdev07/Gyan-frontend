@@ -37,7 +37,7 @@ export default function SolveQuiz() {
             limit: 5,
           },
           withCredentials: true,
-        }
+        },
       );
 
       const data = res.data.data;
@@ -109,11 +109,23 @@ export default function SolveQuiz() {
 
   const submitQuiz = async () => {
     try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        toast.error("Please login first");
+        return;
+      }
+
       const res = await axios.post(
         "https://api-gyan-backend.onrender.com/api/v1/attempt/saveHistory",
         { attempts },
-        { withCredentials: true }
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
+
       if (res.data.data) {
         navigate("/history");
       }
@@ -124,13 +136,10 @@ export default function SolveQuiz() {
 
   const question = questions[currentIndex];
   const progress =
-    questions.length > 0
-      ? ((currentIndex + 1) / questions.length) * 100
-      : 0;
+    questions.length > 0 ? ((currentIndex + 1) / questions.length) * 100 : 0;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-200 via-purple-100 to-pink-100 px-6 py-10">
-      
       {/* Header */}
       <div className="max-w-5xl mx-auto mb-10 flex flex-col md:flex-row justify-between items-center gap-6">
         <div>
@@ -237,47 +246,45 @@ export default function SolveQuiz() {
             })}
           </div>
 
-          {showAnswer &&
-            currentIndex < questions.length - 1 && (
-              <div className="mt-10 text-right">
-                <button
-                  onClick={handleNext}
-                  className="px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-xl shadow-lg hover:scale-105 transition"
-                >
-                  Next →
-                </button>
-              </div>
-            )}
+          {showAnswer && currentIndex < questions.length - 1 && (
+            <div className="mt-10 text-right">
+              <button
+                onClick={handleNext}
+                className="px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-xl shadow-lg hover:scale-105 transition"
+              >
+                Next →
+              </button>
+            </div>
+          )}
 
-          {showAnswer &&
-            currentIndex === questions.length - 1 && (
-              <div className="mt-10 flex flex-col md:flex-row justify-center gap-6">
-                {hasMore && (
-                  <button
-                    onClick={handleLoadMore}
-                    disabled={loading}
-                    className={`px-8 py-3 rounded-xl shadow-lg transition flex items-center gap-2 justify-center
+          {showAnswer && currentIndex === questions.length - 1 && (
+            <div className="mt-10 flex flex-col md:flex-row justify-center gap-6">
+              {hasMore && (
+                <button
+                  onClick={handleLoadMore}
+                  disabled={loading}
+                  className={`px-8 py-3 rounded-xl shadow-lg transition flex items-center gap-2 justify-center
                       ${
                         loading
                           ? "bg-gray-400 cursor-not-allowed"
                           : "bg-gradient-to-r from-indigo-600 to-purple-500 text-white hover:scale-105"
                       }`}
-                  >
-                    {loading && (
-                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    )}
-                    {loading ? "Loading..." : "Load More Questions"}
-                  </button>
-                )}
-
-                <button
-                  onClick={submitQuiz}
-                  className="px-10 py-3 bg-gradient-to-r from-green-600 to-emerald-500 text-white rounded-xl shadow-lg text-lg font-semibold hover:scale-105 transition"
                 >
-                  Submit Quiz 🚀
+                  {loading && (
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  )}
+                  {loading ? "Loading..." : "Load More Questions"}
                 </button>
-              </div>
-            )}
+              )}
+
+              <button
+                onClick={submitQuiz}
+                className="px-10 py-3 bg-gradient-to-r from-green-600 to-emerald-500 text-white rounded-xl shadow-lg text-lg font-semibold hover:scale-105 transition"
+              >
+                Submit Quiz 🚀
+              </button>
+            </div>
+          )}
         </div>
       )}
 
